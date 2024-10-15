@@ -18,7 +18,7 @@ from packaging.version import Version
 # some of the source code are from hbutils
 
 def join_continuation(lines):
-    r"""
+    """
     Based on https://github.com/jaraco/jaraco.text/blob/main/jaraco/text/__init__.py#L575 .
     Join lines continued by a trailing backslash.
     >>> list(join_continuation(['foo \\', 'bar', 'baz']))
@@ -64,8 +64,18 @@ def load_req_file(requirements_file: str) -> List[str]:
             join_continuation(map(drop_comment, yield_lines(reqfile)))
         ))
         
+class ReqCheckItem:
+    def __init__(self, name, version, reqSpec, isSatisfied:bool, parent):
+        self.name = name
+        self.version = version
+        self.reqSpec = reqSpec
+        self.isSatisfied = isSatisfied
+        self.parent = parent
+        
+        
 
 def _yield_reqs_to_install(req: Requirement, current_extra: str = ''):
+    
     if req.marker and not req.marker.evaluate({'extra': current_extra}):
         return
 
@@ -87,6 +97,7 @@ def _yield_reqs_to_install(req: Requirement, current_extra: str = ''):
                         break
 
                 if need_check:  # check for extra reqs
+                    print("check for extra reqs")
                     yield from _yield_reqs_to_install(child_req_obj, ext)
             
             yield "Version satisfied for " + str(req.name) 
