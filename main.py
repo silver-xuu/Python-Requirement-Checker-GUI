@@ -13,13 +13,37 @@ class MainWindow(QMainWindow):
         self.browseButton = self.findChild(QPushButton,"browseButton")
         self.clearButton = self.findChild(QPushButton,"clearButton")
         self.checkButton = self.findChild(QPushButton,"checkButton")
+        self.lineLocation = self.findChild(QLineEdit, "lineLocation")
+        self.logWindow = self.findChild(QTextEdit, "logWindow")
+        self.tableResult= self.findChild(QTableWidget, "tableResult")
+        self.fname =""
+        
         self.initUI()
         self.show()
     
     
         
     def initUI(self):
+        self.browseButton.clicked.connect(self.browseButonOnClick)
+        self.clearButton.clicked.connect(self.clearButonOnClick)
+        self.checkButton.clicked.connect(self.checkButonOnClick)
         pass
+    
+    def browseButonOnClick(self):
+        self.fname , _ = QFileDialog.getOpenFileName(self,"Select a requirement.txt","", "Python Requirement Files (*.txt)")
+        if self.fname:
+            self.lineLocation.setText(self.fname)
+        
+            
+    def clearButonOnClick(self):
+         self.logWindow.setText("")
+         
+    def checkButonOnClick(self):
+        if not self.fname:
+            self.logWindow.setText("Couldn't locate the file")
+            return
+            
+        utils.check_req_file(self.fname)
         
         
 def main():

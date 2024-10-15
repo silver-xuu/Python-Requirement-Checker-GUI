@@ -77,6 +77,7 @@ class ReqCheckItem:
 def _yield_reqs_to_install(req: Requirement, current_extra: str = ''):
     
     if req.marker and not req.marker.evaluate({'extra': current_extra}):
+
         return
 
     try:
@@ -137,7 +138,7 @@ def check_reqs(reqs: List[str]):
     
 
 
-def check_req_file(requirements_file: str) -> bool:
+def check_req_file(requirements_file: str):
     """
     Overview:
         Check if the requirements in the given ``requirements_file`` is satisfied.
